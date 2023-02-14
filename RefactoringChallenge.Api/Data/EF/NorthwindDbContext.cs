@@ -4,8 +4,15 @@ namespace RefactoringChallenge.Entities
 {
     public partial class NorthwindDbContext : DbContext
     {
+        private readonly string _connectionString;
         public NorthwindDbContext()
         {
+            _connectionString = "Server=.;Database=Northwind;Trusted_Connection=True;";
+        }
+
+        public NorthwindDbContext(string connectionString)
+        {
+            _connectionString = connectionString;
         }
 
         public NorthwindDbContext(DbContextOptions<NorthwindDbContext> options)
@@ -21,6 +28,11 @@ namespace RefactoringChallenge.Entities
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Shipper> Shippers { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured) optionsBuilder.UseSqlServer(_connectionString);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
