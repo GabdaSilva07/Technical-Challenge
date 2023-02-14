@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
-using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using RefactoringChallenge.Data.CQRS;
 using RefactoringChallenge.Data.QueryOptions;
@@ -16,14 +15,12 @@ public class OrderController : Controller
 {
     private readonly IQueryFactory<Order> _queryFactory;
     private readonly ICommandFactory<Order, Order> _commandFactory;
-    private readonly IMapper _mapper;
 
-    public OrderController(IQueryFactory<Order> queryFactory, ICommandFactory<Order, Order> commandFactory,
-        IMapper mapper)
+    public OrderController(IQueryFactory<Order> queryFactory, ICommandFactory<Order, Order> commandFactory)
     {
         _queryFactory = queryFactory;
         _commandFactory = commandFactory;
-        _mapper = mapper;
+
     }
 
     [HttpGet]
