@@ -45,4 +45,11 @@ RUN dotnet publish "RefactoringChallenge.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+ARG NORTHWIND_DB_CONNECTION_STRING="Server=.;Database=Northwind;Trusted_Connection=True;MultipleActiveResultSets=true"
+
+# Get the connection string from the Azure DevOps pipeline and set it as an environment variable
+ENV DefaultConnection=$NORTHWIND_DB_CONNECTION_STRING
+
+
 ENTRYPOINT ["dotnet", "RefactoringChallenge.dll"]

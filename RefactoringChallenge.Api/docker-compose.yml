@@ -1,0 +1,43 @@
+﻿version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      args:
+        AZURE_FEED_USERNAME: <azure_email_address>
+        AZURE_ARTIFACT_FEED_URL: <azure_artifacts_feed_url>
+        PAT_TOKEN: <personal_access_token>
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=${DefaultConnection}
+    depends_on:
+      - db
+    networks:
+      - my-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - SA_PASSWORD=MyDbPass123
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Developer
+      - MSSQL_TCP_PORT=1433
+      - MSSQL_AGENT_ENABLED=True
+    ports:
+      - "1433:1433"
+    volumes:
+      - dbdata:/var/opt/mssql/data
+    networks:
+      - my-network
+    container_name: mssql-server
+    privileged: true
+
+volumes:
+  dbdata:
+
+networks:
+  my-network:
