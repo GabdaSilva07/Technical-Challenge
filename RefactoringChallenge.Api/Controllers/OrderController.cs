@@ -25,22 +25,21 @@ public class OrderController : Controller
 
     [HttpGet]
     public async Task<IActionResult> Get(string sortBy = "Date", string sortDirection = "dec", int top = 10,
-        int skip = 0)
+        int skip = 0, bool allChildern = true)
     {
         using var query = _queryFactory.Get();
         IQueryOptions<Order> queryOptions = new OrderQueryOptions
         {
             SortBy = sortBy,
-            AllChildren = true,
+            AllChildren = allChildern,
             SortDirection = sortDirection,
             Top = top,
             Skip = skip
         };
-
-        var result = await query.execute(queryOptions);
-
+        
         try
         {
+            var result = await query.execute(queryOptions);
             return Json(result);
         }
         catch (Exception e)
@@ -110,6 +109,8 @@ public class OrderController : Controller
         }
     }
 
+
+    //Change ModelBuilder to enable deleting order with order details
     [HttpDelete]
     [Route("{orderId}")]
     public async Task<IActionResult> Delete([FromBody] Order order)
