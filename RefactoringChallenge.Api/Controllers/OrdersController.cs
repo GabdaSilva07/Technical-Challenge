@@ -41,7 +41,8 @@ namespace RefactoringChallenge.Controllers
         [HttpGet("{orderId}")]
         public IActionResult GetById([FromRoute] int orderId)
         {
-            var result = _mapper.From(_northwindDbContext.Orders).ProjectToType<OrderResponse>().FirstOrDefault(o => o.OrderId == orderId);
+            var result = _mapper.From(_northwindDbContext.Orders)
+                .ProjectToType<OrderResponse>().FirstOrDefault(o => o.OrderId == orderId);
 
             if (result == null)
                 return NotFound();

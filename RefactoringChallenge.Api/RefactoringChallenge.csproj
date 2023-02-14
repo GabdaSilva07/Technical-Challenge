@@ -18,5 +18,14 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Commands" />
+    <Folder Include="Data\CQRS" />
+    <Folder Include="Data\EF" />
+    <Folder Include="Data\Factories" />
+    <Folder Include="Data\Queries" />
+    <Folder Include="Data\QueryOptions" />
+  </ItemGroup>
+
 
 </Project>
