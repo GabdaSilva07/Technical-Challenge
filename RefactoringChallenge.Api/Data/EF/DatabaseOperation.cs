@@ -15,6 +15,10 @@ public abstract class DatabaseOperation : IDisposable
 
     public void Dispose()
     {
-        throw new NotImplementedException();
+        if (_dbContext != null)
+        {
+            _dbContext.Database.CloseConnection();
+            _dbContext.Dispose();
+        }
     }
 }

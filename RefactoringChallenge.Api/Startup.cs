@@ -1,3 +1,4 @@
+using System.IO;
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using RefactoringChallenge.Data.CQRS;
+using RefactoringChallenge.Data.Factories;
 using RefactoringChallenge.Entities;
 
 namespace RefactoringChallenge
@@ -17,19 +21,29 @@ namespace RefactoringChallenge
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var configurationRoot = GetConfigurationRoot();
+            
             services.AddDbContext<NorthwindDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
-
+            
+            
             services.AddSingleton(TypeAdapterConfig.GlobalSettings);
             services.AddScoped<IMapper, ServiceMapper>();
 
             services.AddControllers();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             services.AddSwaggerGen();
+
+            var orderCommandQueryFactory =
+                new OrderCommandQueryFactory(configurationRoot.GetConnectionString("DefaultConnection"));
+            services.AddScoped<IQueryFactory<Order>>(provider => orderCommandQueryFactory);
+            services.AddScoped<ICommandFactory<Order, Order>>(provider => orderCommandQueryFactory);
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -50,6 +64,15 @@ namespace RefactoringChallenge
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static IConfigurationRoot GetConfigurationRoot()
+        {
+            return new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile("appsettings.Development.json", true)
+                .AddEnvironmentVariables().Build();
         }
     }
 }
