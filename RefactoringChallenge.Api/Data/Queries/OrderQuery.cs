@@ -26,13 +26,8 @@ namespace RefactoringChallenge.Data.Queries
             }
             else
             {
-                var result = GetPagedResults(GetSortedResults(
-                        ((NorthwindDbContext)_dbContext)
-                        .Orders
-                        .Where(x => x.Customer.CompanyName.Contains(queryOptions.SearchQuery)), queryOptions),
-                    queryOptions)
-                    .ToList();
-
+                var result = GetSearchedResults(queryOptions).ToList();
+                        
                 return await Task.FromResult(result);
             }
         }
@@ -86,6 +81,20 @@ namespace RefactoringChallenge.Data.Queries
                     ? results.OrderByDescending(x => x.OrderDate)
                     : results.OrderBy(x => x.OrderId)
             };
+        }
+
+        private IQueryable<Order> GetSearchedResults(IQueryOptions<Order> queryOption)
+        {
+            if (queryOption.AllChildren)
+                return ((NorthwindDbContext)_dbContext)
+                    .Orders
+                    .Include(c => c.Customer)
+                    .Include(E => E.Employee)
+                    .Include(od => od.OrderDetails)
+                    .Where(x => x.OrderId == int.Parse(queryOption.SearchQuery));
+            return ((NorthwindDbContext)_dbContext)
+                .Orders
+                .Where(x => x.OrderId == int.Parse(queryOption.SearchQuery));
         }
 
 

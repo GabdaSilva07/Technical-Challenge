@@ -89,6 +89,14 @@ namespace RefactoringChallenge.Entities
                 entity.Property(e => e.PostalCode).HasMaxLength(10);
 
                 entity.Property(e => e.Region).HasMaxLength(15);
+
+
+                //Fixed the Serialization error, Alternatively I could Have mapped the CustomerId to the Order.CustomerId
+
+                // entity.HasMany(c => c.Orders)
+                //     .WithOne(c => c.Customer)
+                //     .HasForeignKey(o => o.CustomerId)
+                //     .HasConstraintName("FK_Orders_Customers");
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -232,7 +240,8 @@ namespace RefactoringChallenge.Entities
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior
+                        .ClientSetNull) // To be able to delete Order and all Order Details associated with it change to Cascade
                     .HasConstraintName("FK_Order_Details_Orders");
 
                 entity.HasOne(d => d.Product)
