@@ -5,13 +5,13 @@ using RefactoringChallenge.Entities;
 
 namespace RefactoringChallenge.Data.QueryOptions;
 
-public class OrderQueryOptions : IQueryOptions<Order>
+public class OrderDetailQueryOptions : IQueryOptions<OrderDetail>
 {
-    public OrderQueryOptions()
+    public OrderDetailQueryOptions()
     {
         Top = 10000;
     }
-    
+
     public string QueryValue { get; set; }
     public string SortBy { get; set; }
     public string SortDirection { get; set; }
@@ -20,7 +20,7 @@ public class OrderQueryOptions : IQueryOptions<Order>
     public bool AllChildren { get; set; }
     public string SearchQuery { get; set; }
 
-    public Expression<Func<Order, bool>> QueryPredicate
+    public Expression<Func<OrderDetail, bool>> QueryPredicate
     {
         get { return o => o.OrderId == int.Parse(QueryValue); }
         set => throw new NotImplementedException();

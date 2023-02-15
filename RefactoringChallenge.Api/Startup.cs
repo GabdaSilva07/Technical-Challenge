@@ -45,6 +45,11 @@ namespace RefactoringChallenge
                 new OrderCommandQueryFactory(configurationRoot.GetConnectionString("DefaultConnection"));
             services.AddScoped<IQueryFactory<Order>>(provider => orderCommandQueryFactory);
             services.AddScoped<ICommandFactory<Order, Order>>(provider => orderCommandQueryFactory);
+
+            var orderDetailCommandQueryFactory =
+                new OrderDetailCommandQueryFactory(configurationRoot.GetConnectionString("DefaultConnection"));
+            services.AddScoped<IQueryFactory<OrderDetail>>(provider => orderDetailCommandQueryFactory);
+            services.AddScoped<ICommandFactory<OrderDetail, OrderDetail>>(provider => orderDetailCommandQueryFactory);
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
