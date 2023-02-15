@@ -13,7 +13,7 @@ services:
       - "443:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=${DefaultConnection}
+      - NORTHWIND_DB_CONNECTION_STRING=Server=mssql-server,1433;Database=Northwind;Integrated Security=false;TrustServerCertificate=true;
     depends_on:
       - db
     networks:
@@ -34,6 +34,7 @@ services:
     networks:
       - my-network
     container_name: mssql-server
+    user: root
     privileged: true
 
 volumes:

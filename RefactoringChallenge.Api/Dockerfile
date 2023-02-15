@@ -36,6 +36,7 @@ ENV VSS_NUGET_EXTERNAL_FEED_ENDPOINTS="{\"endpointCredentials\": [{\"endpoint\":
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY . .
+COPY C:/templatedata/master.mdf /var/opt/mssql/data/
 RUN dotnet restore "RefactoringChallenge.csproj"
 RUN dotnet build "RefactoringChallenge.csproj" -c Release -o /app/build
 
@@ -46,7 +47,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-ARG NORTHWIND_DB_CONNECTION_STRING="Server=.;Database=Northwind;Trusted_Connection=True;MultipleActiveResultSets=true"
+ARG NORTHWIND_DB_CONNECTION_STRING
 
 # Get the connection string from the Azure DevOps pipeline and set it as an environment variable
 ENV DefaultConnection=$NORTHWIND_DB_CONNECTION_STRING

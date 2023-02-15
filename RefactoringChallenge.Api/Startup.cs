@@ -27,8 +27,9 @@ namespace RefactoringChallenge
         public void ConfigureServices(IServiceCollection services)
         {
             var configurationRoot = GetConfigurationRoot();
-            
-            services.AddDbContext<NorthwindDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+
+            services.AddDbContext<NorthwindDbContext>(options =>
+                options.UseSqlServer(configurationRoot.GetConnectionString("DefaultConnection")));
             
             
             services.AddSingleton(TypeAdapterConfig.GlobalSettings);
@@ -58,6 +59,7 @@ namespace RefactoringChallenge
 
             app.UseRouting();
 
+            app.UseAuthorization();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
