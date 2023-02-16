@@ -30,7 +30,7 @@ jobs:
           context: .
           file: ./Deployment/Dockerfile
           push: true
-          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: ${{ env.imageName }}
           build-args: |
             BUILD_CONFIGURATION=${{ env.buildConfiguration }}
           cache-from: type=registry,ref=${{ env.dockerRegistry }}/${{ env.imageName }}:latest
