@@ -27,7 +27,7 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v2
         with:
-          context: ./Technical-Challenge/RefactoringChallenge.Api/../
+          context: ./Technical-Challenge/RefactoringChallenge.Api/../Dockerfile
           file: Dockerfile
           push: true
           tags: ${{ env.imageName }}
