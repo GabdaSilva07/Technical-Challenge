@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Deployment/Dockerfile
+          file: ../Dockerfile
           push: true
           tags: ${{ env.imageName }}
           build-args: |
