@@ -11,7 +11,7 @@ on:
     env:
       IMAGE_NAME: refactoringchallengeapi
       BUILD_CONFIGURATION: Debug
-      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      #DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
 
 #Restore, build and test the solution before creating the docker image
 jobs:
@@ -35,8 +35,8 @@ jobs:
           cache-from: type=registry,ref=${{ env.dockerRegistry }}/${{ env.imageName }}:latest
           cache-to: type=inline
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME: TestUserName
+          DOCKER_PASSWORD: TestPassword 
       
       
       
