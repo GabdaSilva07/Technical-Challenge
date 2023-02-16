@@ -33,7 +33,7 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           build-args: |
             BUILD_CONFIGURATION=${{ env.BUILD_CONFIGURATION }}
-          cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ env.dockerRegistry }}/${{ env.imageName }}:latest
           cache-to: type=inline
         env:
           DOCKER_USERNAME: TestUserName
