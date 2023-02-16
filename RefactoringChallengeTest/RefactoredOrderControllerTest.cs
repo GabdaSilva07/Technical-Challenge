@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using RefactoringChallenge.Controllers;
 using RefactoringChallenge.Data.CQRS;
