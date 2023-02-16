@@ -8,10 +8,10 @@ on:
   pull_request:
     branches: [ main ]
     
-    env:
-      IMAGE_NAME: refactoringchallengeapi
-      BUILD_CONFIGURATION: --debug
-      DOCKER_REGISTRY: DockerRegistry
+env:
+    imageName: refactoringchallengeapi
+    buildConfiguration: Debug
+    dockerRegistry: docker.io
 
 #Restore, build and test the solution before creating the docker image
 jobs:
@@ -22,7 +22,7 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore
       - name: Build and Test
-        run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} && dotnet test --configuration ${{ env.BUILD_CONFIGURATION }}
+        run: dotnet build --configuration ${{ env.buildConfiguration }} && dotnet test --configuration ${{ env.buildConfiguration }}
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v2
         with:
