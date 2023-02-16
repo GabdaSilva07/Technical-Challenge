@@ -1,0 +1,43 @@
+﻿#Pipeline for a .Net Docker image using GitHub actions on the dev branch
+
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+    
+    env:
+      IMAGE_NAME: refactoringchallengeapi
+      BUILD_CONFIGURATION: Debug
+      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+
+#Restore, build and test the solution before creating the docker image
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Restore Dependencies
+        run: dotnet restore
+      - name: Build and Test
+        run: dotnet build --configuration ${{ env.buildConfiguration }} && dotnet test --configuration ${{ env.buildConfiguration }}
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Deployment/Dockerfile
+          push: true
+          tags: ${{ env.dockerRegistry }}/${{ env.imageName }}:${{ github.sha }}
+          build-args: |
+            BUILD_CONFIGURATION=${{ env.buildConfiguration }}
+          cache-from: type=registry,ref=${{ env.dockerRegistry }}/${{ env.imageName }}:latest
+          cache-to: type=inline
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      
+      
+      
+

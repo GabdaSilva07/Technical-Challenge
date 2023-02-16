@@ -26,9 +26,5 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Deployment" />
-  </ItemGroup>
-
 
 </Project>
