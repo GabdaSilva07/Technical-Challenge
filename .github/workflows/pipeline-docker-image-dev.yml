@@ -11,7 +11,7 @@ on:
     env:
       IMAGE_NAME: refactoringchallengeapi
       BUILD_CONFIGURATION: --debug
-      #DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      DOCKER_REGISTRY: DockerRegistry
 
 #Restore, build and test the solution before creating the docker image
 jobs:
@@ -22,17 +22,17 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore
       - name: Build and Test
-        run: dotnet build --configuration ${{ env.buildConfiguration }} && dotnet test --configuration ${{ env.buildConfiguration }}
+        run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} && dotnet test --configuration ${{ env.BUILD_CONFIGURATION }}
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Deployment/Dockerfile
           push: true
-          tags: ${{ env.dockerRegistry }}/${{ env.imageName }}:${{ github.sha }}
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           build-args: |
-            BUILD_CONFIGURATION=${{ env.buildConfiguration }}
-          cache-from: type=registry,ref=${{ env.dockerRegistry }}/${{ env.imageName }}:latest
+            BUILD_CONFIGURATION=${{ env.BUILD_CONFIGURATION }}
+          cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           cache-to: type=inline
         env:
           DOCKER_USERNAME: TestUserName
