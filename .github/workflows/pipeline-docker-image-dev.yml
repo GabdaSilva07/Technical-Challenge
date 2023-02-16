@@ -10,7 +10,7 @@ on:
     
     env:
       IMAGE_NAME: refactoringchallengeapi
-      BUILD_CONFIGURATION: Debug
+      BUILD_CONFIGURATION: --debug
       #DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
 
 #Restore, build and test the solution before creating the docker image
