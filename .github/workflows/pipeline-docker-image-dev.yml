@@ -27,8 +27,8 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: ../Dockerfile
+          context: ../
+          file: Dockerfile
           push: true
           tags: ${{ env.imageName }}
           build-args: |
